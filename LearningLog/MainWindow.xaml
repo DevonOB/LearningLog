@@ -78,7 +78,7 @@
                     <TextBox x:Name="textNotes" Grid.ColumnSpan="3" Grid.Row="3" Margin="5" TextChanged="textNotes_TextChanged" ToolTip="Enter any notes about today's entry"/>
 
                     <!-- Row 4. Just the save button. -->
-                    <Button x:Name="buttonSave" Grid.Column="1" Grid.Row="4" Width="120" Margin="5" IsEnabled="False" ToolTip="Click to finalize and save this entry">
+                    <Button x:Name="buttonSave" Grid.Column="1" Grid.Row="4" Width="120" Margin="5" IsEnabled="False" ToolTip="Click to finalize and save this entry" Click="buttonSave_Click">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
