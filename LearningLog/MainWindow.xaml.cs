@@ -1,4 +1,11 @@
-﻿using System.IO;
+﻿// Devon O'Brien
+// 2024-11-02
+// description: Allows the user to start and end recordings as well as listen to those recordings.
+//              Also allows the user to delete the recordings and see where they are saved to.
+
+
+
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
@@ -26,13 +33,15 @@ namespace LearningLog
         {
             InitializeComponent();
         }
-
+        
+        // sets global variables for use in the code
         int ID = 0;
         string recordingInfo = string.Empty;
         string recordingNotes = string.Empty;
         FileInfo storedInfo;
         bool recording = false;
 
+        // One the first click starts a recording and on the second click ends the recording and sets the rest of the page to be interactible
         private void buttonRecord_Click(object sender, RoutedEventArgs e)
         {
             if (recording == false )
@@ -48,14 +57,17 @@ namespace LearningLog
                 buttonRecord.Content = ("Record");
                 FileInfo newRecordingInfo = RecordWav.EndRecording();
                 recordingInfo = newRecordingInfo.ToString();
+                storedInfo = newRecordingInfo;
                 buttonPlay.IsEnabled = true;
                 recording = false;
                 buttonRecord.IsEnabled = false;
                 buttonDelete.IsEnabled = true;
+                textNotes.IsEnabled = true;
             }
             
         }
 
+        // Deletes the current recording and resets the page for a new recording to occur
         private void buttonDelete_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -83,6 +95,7 @@ namespace LearningLog
             
         }
 
+        // Plays the recording and displays an error message if it is unavailible
         private void buttonPlay_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -106,28 +119,46 @@ namespace LearningLog
             }
         }
 
+        // Saves the current object and resets the page
         private void buttonSave_Click(object sender, RoutedEventArgs e)
         {
             ID++;
             LogEntry newEntry;
-            newEntry = new LogEntry(ID, DateTime.Now.ToString("yyyyMMdd"), int.Parse(comboWellness.Text), int.Parse(comboQuality.Text), textNotes.Text, storedInfo);
+            string noteEntry = textNotes.Text;
+            newEntry = new LogEntry(ID, DateTime.Now.ToString("yyyyMMdd"), int.Parse(comboWellness.Text), int.Parse(comboQuality.Text), noteEntry, storedInfo);
             buttonDelete.IsEnabled = false;
             statusChange("Saved recording");
             buttonRecord.IsEnabled = true;
             buttonPlay.IsEnabled = false;
             buttonSave.IsEnabled = false;
+            updateSummary(newEntry);
             textNotes.Text = string.Empty;
+            textNotes.IsEnabled = false;
+            
         }
 
+        // When notes change activates the save button
         private void textNotes_TextChanged(object sender, TextChangedEventArgs e)
         {
             buttonSave.IsEnabled = true;
             statusChange("Edited notes");
         }
 
+        // sets the status bar
         private void statusChange(string e)
         {
             textStatus.Text = e + " " +DateTime.Now;
+        }
+
+        // update the summary page
+        private void updateSummary(LogEntry entry)
+        {
+            textID.Text = entry.GetID().ToString();
+            textDate.Text = entry.GetEntryDate();
+            textSummaryNotes.Text = entry.GetNotes();
+            textWellness.Text = entry.GetWellness().ToString();
+            textQuality.Text = entry.GetQuality().ToString();
+            textFile.Text = entry.GetRecordingFile().ToString();
         }
     }
 }

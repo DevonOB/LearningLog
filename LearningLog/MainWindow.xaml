@@ -75,7 +75,7 @@
                     <Label Content="_Notes:" Grid.Column="0" Grid.Row="2" Target="{Binding ElementName=textNotes}" VerticalAlignment="Bottom"/>
 
                     <!-- Row 3. Just the big textbox. -->
-                    <TextBox x:Name="textNotes" Grid.ColumnSpan="3" Grid.Row="3" Margin="5" TextChanged="textNotes_TextChanged" ToolTip="Enter any notes about today's entry"/>
+                    <TextBox x:Name="textNotes" Grid.ColumnSpan="3" Grid.Row="3" Margin="5" TextChanged="textNotes_TextChanged" ToolTip="Enter any notes about today's entry" IsEnabled="False"/>
 
                     <!-- Row 4. Just the save button. -->
                     <Button x:Name="buttonSave" Grid.Column="1" Grid.Row="4" Width="120" Margin="5" IsEnabled="False" ToolTip="Click to finalize and save this entry" Click="buttonSave_Click">
@@ -90,22 +90,22 @@
 
                         </Grid>
                     </Button>
-                    <ComboBox x:Name="comboWellness" HorizontalAlignment="Left" Margin="115,41,0,0" Grid.Row="1" VerticalAlignment="Top" Width="120" Grid.Column="1" Grid.RowSpan="2" SelectedIndex="0">
+                    <ComboBox x:Name="comboWellness" HorizontalAlignment="Left" Margin="115,41,0,0" Grid.Row="1" VerticalAlignment="Top" Width="120" Grid.Column="1" Grid.RowSpan="2" SelectedIndex="0" ToolTip="Your wellness during the recording.">
                         <ComboBoxItem Content="1"/>
                         <ComboBoxItem Content="2"/>
                         <ComboBoxItem Content="3"/>
                         <ComboBoxItem Content="4"/>
                         <ComboBoxItem Content="5"/>
                     </ComboBox>
-                    <ComboBox x:Name="comboQuality" Grid.Column="2" HorizontalAlignment="Left" Margin="133,40,0,0" Grid.Row="1" VerticalAlignment="Top" Width="120" Grid.RowSpan="2" SelectedIndex="0">
+                    <ComboBox x:Name="comboQuality" Grid.Column="2" HorizontalAlignment="Left" Margin="133,40,0,0" Grid.Row="1" VerticalAlignment="Top" Width="120" Grid.RowSpan="2" SelectedIndex="0" ToolTip="The quality of the recording">
                         <ComboBoxItem Content="1"/>
                         <ComboBoxItem Content="2"/>
                         <ComboBoxItem Content="3"/>
                         <ComboBoxItem Content="4"/>
                         <ComboBoxItem Content="5"/>
                     </ComboBox>
-                    <Label Grid.Column="1" Content="Label" HorizontalAlignment="Left" Margin="72,40,0,0" Grid.Row="1" VerticalAlignment="Top" Width="38" Height="24" Grid.RowSpan="2"/>
-                    <Label Grid.Column="2" Content="Label" HorizontalAlignment="Left" Margin="90,40,0,0" Grid.Row="1" VerticalAlignment="Top" Height="25" Grid.RowSpan="2"/>
+                    <Label Grid.Column="1" Content="_Wellness" HorizontalAlignment="Left" Margin="50,39,0,0" Grid.Row="1" VerticalAlignment="Top" Width="60" Height="24" Grid.RowSpan="2" Target="{Binding ElementName=comboWellness, Mode=OneWay}"/>
+                    <Label Grid.Column="2" Content="_Quality" HorizontalAlignment="Left" Margin="81,39,0,0" Grid.Row="1" VerticalAlignment="Top" Height="25" Grid.RowSpan="2" Target="{Binding ElementName=comboQuality, Mode=OneWay}"/>
                     <TextBox x:Name="textStatus" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="211" Height="46" IsHitTestVisible="False" ToolTip="displays the last action and the time it was taken"/>
 
 
@@ -115,10 +115,12 @@
             <TabItem x:Name="tabSummary" Header="_Summary" ToolTip="View the summary" >
                 <Grid ToolTip="Wellness during recording">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="11*"/>
+                        <ColumnDefinition Width="13*"/>
+                        <ColumnDefinition Width="174*"/>
+                        <ColumnDefinition Width="199*"/>
+                        <ColumnDefinition Width="199*"/>
+                        <ColumnDefinition Width="199*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -128,18 +130,18 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Label Grid.Column="1" Content="Recording ID: " HorizontalAlignment="right" Margin="114,0,0,0" VerticalAlignment="Center"/>
-                    <Label Grid.Column="1" Content="Date: " HorizontalAlignment="right" Margin="132,0,0,0" Grid.Row="1" VerticalAlignment="Center"/>
-                    <Label Grid.Column="1" Content="Wellness: " HorizontalAlignment="right" Margin="150,0,0,0" Grid.Row="2" VerticalAlignment="Center"/>
-                    <Label Grid.Column="1" Content="Quality: " HorizontalAlignment="right" Margin="150,0,0,0" Grid.Row="3" VerticalAlignment="Center"/>
-                    <Label Grid.Column="1" Content="Notes: " HorizontalAlignment="right" Margin="132,0,0,0" Grid.Row="4" VerticalAlignment="Center"/>
-                    <Label Grid.Column="1" Content="File: " HorizontalAlignment="right" Margin="132,0,0,0" Grid.Row="5" VerticalAlignment="Center"/>
-                    <TextBox Grid.Column="2" HorizontalAlignment="Left" Grid.Row="0" TextWrapping="Wrap" Text="" VerticalAlignment="center" Width="120" ToolTip="Recording ID" IsHitTestVisible="False"/>
-                    <TextBox Grid.Column="2" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="center" Width="120" ToolTip="Recording date" IsHitTestVisible="False"/>
-                    <TextBox Grid.Column="2" HorizontalAlignment="Left" Grid.Row="2" TextWrapping="Wrap" Text="" VerticalAlignment="center" Width="120" IsHitTestVisible="False"/>
-                    <TextBox Grid.Column="2" HorizontalAlignment="Left" Grid.Row="3" TextWrapping="Wrap" Text="" VerticalAlignment="center" Width="120" ToolTip="Quality during recording" IsHitTestVisible="False"/>
-                    <TextBox Grid.Column="2" HorizontalAlignment="Left" Grid.Row="4" TextWrapping="Wrap" Text="" VerticalAlignment="center" Width="120" ToolTip="Notes on recording" IsHitTestVisible="False"/>
-                    <TextBox Grid.Column="2" HorizontalAlignment="Left" Grid.Row="5" TextWrapping="Wrap" Text="" VerticalAlignment="center" Width="120" ToolTip="Recording file" IsHitTestVisible="False"/>
+                    <Label Grid.Column="3" Content="Recording ID: " HorizontalAlignment="Left" Margin="113,0,0,0" VerticalAlignment="Center"/>
+                    <Label Grid.Column="3" Content="Date: " HorizontalAlignment="Left" Margin="151,0,0,0" Grid.Row="1" VerticalAlignment="Center"/>
+                    <Label Grid.Column="3" Content="Wellness: " HorizontalAlignment="Left" Margin="129,0,0,0" Grid.Row="2" VerticalAlignment="Center"/>
+                    <Label Grid.Column="3" Content="Quality: " HorizontalAlignment="Left" Margin="139,0,0,0" Grid.Row="3" VerticalAlignment="Center"/>
+                    <Label Grid.Column="3" Content="Notes: " HorizontalAlignment="Left" Margin="151,0,0,0" Grid.Row="4" VerticalAlignment="Center"/>
+                    <Label Grid.Column="3" Content="File: "  HorizontalAlignment="Left" Margin="163,0,0,0" Grid.Row="5" VerticalAlignment="Center"/>
+                    <TextBox x:Name="textID" Grid.Column="4" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="120" ToolTip="Recording ID" IsHitTestVisible="False"/>
+                    <TextBox x:Name="textDate" Grid.Column="4" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="120" ToolTip="Recording date" IsHitTestVisible="False"/>
+                    <TextBox x:Name="textWellness" Grid.Column="4" HorizontalAlignment="Left" Grid.Row="2" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="120" IsHitTestVisible="False"/>
+                    <TextBox x:Name="textQuality" Grid.Column="4" HorizontalAlignment="Left" Grid.Row="3" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="120" ToolTip="Quality during recording" IsHitTestVisible="False"/>
+                    <TextBox x:Name="textSummaryNotes" Grid.Column="4" HorizontalAlignment="Left" Grid.Row="4" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="198" ToolTip="Notes on recording" IsHitTestVisible="False" Grid.ColumnSpan="2" Margin="4,0,0,0"/>
+                    <TextBox x:Name="textFile" Grid.Column="4" HorizontalAlignment="Left" Grid.Row="5" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="362" ToolTip="Recording file" IsHitTestVisible="False" Grid.ColumnSpan="2" Margin="4,0,0,0" Height="41"/>
 
                 </Grid>
 
