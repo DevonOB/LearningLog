@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LearningLog"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="LearningLog" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -30,7 +30,7 @@
                     </Grid.RowDefinitions>
 
                     <!-- Record button -->
-                    <Button x:Name="buttonRecord" Grid.Column="0" Grid.Row="0" Width="120" Margin="5" Click="StartRecording" ToolTip="Click to start the audio recording">
+                    <Button x:Name="buttonRecord" Grid.Column="0" Grid.Row="0" Width="120" Margin="5" Click="buttonRecord_Click" ToolTip="Click to start the audio recording">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
@@ -90,13 +90,56 @@
 
                         </Grid>
                     </Button>
+                    <ComboBox x:Name="comboWellness" HorizontalAlignment="Left" Margin="115,41,0,0" Grid.Row="1" VerticalAlignment="Top" Width="120" Grid.Column="1" Grid.RowSpan="2" SelectedIndex="0">
+                        <ComboBoxItem Content="1"/>
+                        <ComboBoxItem Content="2"/>
+                        <ComboBoxItem Content="3"/>
+                        <ComboBoxItem Content="4"/>
+                        <ComboBoxItem Content="5"/>
+                    </ComboBox>
+                    <ComboBox x:Name="comboQuality" Grid.Column="2" HorizontalAlignment="Left" Margin="133,40,0,0" Grid.Row="1" VerticalAlignment="Top" Width="120" Grid.RowSpan="2" SelectedIndex="0">
+                        <ComboBoxItem Content="1"/>
+                        <ComboBoxItem Content="2"/>
+                        <ComboBoxItem Content="3"/>
+                        <ComboBoxItem Content="4"/>
+                        <ComboBoxItem Content="5"/>
+                    </ComboBox>
+                    <Label Grid.Column="1" Content="Label" HorizontalAlignment="Left" Margin="72,40,0,0" Grid.Row="1" VerticalAlignment="Top" Width="38" Height="24" Grid.RowSpan="2"/>
+                    <Label Grid.Column="2" Content="Label" HorizontalAlignment="Left" Margin="90,40,0,0" Grid.Row="1" VerticalAlignment="Top" Height="25" Grid.RowSpan="2"/>
+                    <TextBox x:Name="textStatus" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="211" Height="46" IsHitTestVisible="False" ToolTip="displays the last action and the time it was taken"/>
 
 
                 </Grid>
             </TabItem>
             <!-- The summary tab. -->
             <TabItem x:Name="tabSummary" Header="_Summary" ToolTip="View the summary" >
-                <Grid>
+                <Grid ToolTip="Wellness during recording">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Column="1" Content="Recording ID: " HorizontalAlignment="right" Margin="114,0,0,0" VerticalAlignment="Center"/>
+                    <Label Grid.Column="1" Content="Date: " HorizontalAlignment="right" Margin="132,0,0,0" Grid.Row="1" VerticalAlignment="Center"/>
+                    <Label Grid.Column="1" Content="Wellness: " HorizontalAlignment="right" Margin="150,0,0,0" Grid.Row="2" VerticalAlignment="Center"/>
+                    <Label Grid.Column="1" Content="Quality: " HorizontalAlignment="right" Margin="150,0,0,0" Grid.Row="3" VerticalAlignment="Center"/>
+                    <Label Grid.Column="1" Content="Notes: " HorizontalAlignment="right" Margin="132,0,0,0" Grid.Row="4" VerticalAlignment="Center"/>
+                    <Label Grid.Column="1" Content="File: " HorizontalAlignment="right" Margin="132,0,0,0" Grid.Row="5" VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="2" HorizontalAlignment="Left" Grid.Row="0" TextWrapping="Wrap" Text="" VerticalAlignment="center" Width="120" ToolTip="Recording ID" IsHitTestVisible="False"/>
+                    <TextBox Grid.Column="2" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="center" Width="120" ToolTip="Recording date" IsHitTestVisible="False"/>
+                    <TextBox Grid.Column="2" HorizontalAlignment="Left" Grid.Row="2" TextWrapping="Wrap" Text="" VerticalAlignment="center" Width="120" IsHitTestVisible="False"/>
+                    <TextBox Grid.Column="2" HorizontalAlignment="Left" Grid.Row="3" TextWrapping="Wrap" Text="" VerticalAlignment="center" Width="120" ToolTip="Quality during recording" IsHitTestVisible="False"/>
+                    <TextBox Grid.Column="2" HorizontalAlignment="Left" Grid.Row="4" TextWrapping="Wrap" Text="" VerticalAlignment="center" Width="120" ToolTip="Notes on recording" IsHitTestVisible="False"/>
+                    <TextBox Grid.Column="2" HorizontalAlignment="Left" Grid.Row="5" TextWrapping="Wrap" Text="" VerticalAlignment="center" Width="120" ToolTip="Recording file" IsHitTestVisible="False"/>
 
                 </Grid>
 
