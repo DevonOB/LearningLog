@@ -30,7 +30,7 @@
                     </Grid.RowDefinitions>
 
                     <!-- Record button -->
-                    <Button x:Name="buttonRecord" Grid.Column="0" Grid.Row="0" Width="120" Margin="5" Click="buttonRecord_Click" ToolTip="Click to start the audio recording">
+                    <Button x:Name="buttonRecord" Grid.Column="0" Grid.Row="0" Width="120" Margin="5" Click="StartRecording" ToolTip="Click to start the audio recording">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />

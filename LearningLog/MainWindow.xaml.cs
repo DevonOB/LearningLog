@@ -28,50 +28,68 @@ namespace LearningLog
         }
 
         string recordingInfo = string.Empty;
+        string recordingNotes = string.Empty;
+        private readonly Exception fileNotFoundException;
 
         private void buttonRecord_Click(object sender, RoutedEventArgs e)
         {
-            RecordWav.StartRecording();
+            //RecordWav.StartRecording();
             MessageBoxResult recording = MessageBox.Show("Recording in progress.\nClicking any button will end the recording.", "Recording in progress", MessageBoxButton.YesNo);
             if (recording == MessageBoxResult.Yes)
             {
                 FileInfo newRecordingInfo = RecordWav.EndRecording();
-                textNotes.Text = newRecordingInfo.ToString();
                 recordingInfo = newRecordingInfo.ToString();
                 buttonPlay.IsEnabled = true;
-                buttonDelete.IsEnabled = true;
             }
             else
             {
                 FileInfo newRecordingInfo = RecordWav.EndRecording();
-                textNotes.Text = newRecordingInfo.ToString();
                 recordingInfo = newRecordingInfo.ToString();
                 buttonPlay.IsEnabled = true;
-                buttonDelete.IsEnabled = true;
             }
         }
 
-        private void buttonDelete_Click(object sender, RoutedEventArgs e, Exception fileNotFoundException)
+        private void buttonDelete_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 File.Delete(recordingInfo);
+                recordingInfo = string.Empty;
+                
             }
             catch
             {
                 throw fileNotFoundException;           
             }
+            try
+            {
+                File.Delete(recordingNotes);
+
+            }
+            catch
+            {
+                throw fileNotFoundException;
+            }
         }
 
         private void buttonPlay_Click(object sender, RoutedEventArgs e)
         {
-            SoundPlayer newRecording = new SoundPlayer(recordingInfo);
-            newRecording.Play();
+            try
+            {
+                SoundPlayer newRecording = new SoundPlayer(recordingInfo);
+                newRecording.Play();
+            }
+            catch
+            {
+                throw fileNotFoundException;
+            }
         }
 
         private void buttonSave_Click(object sender, RoutedEventArgs e)
         {
-            File.WriteAllText(Environment.CurrentDirectory + "Files\\RecordingInfo" + DateTime.Now.ToString("yyyyMMdd") + ".text", textNotes.Text);
+            recordingNotes = Environment.CurrentDirectory + "Files\\RecordingNotes" + DateTime.Now.ToString("yyyyMMdd") + ".text";
+            File.WriteAllText(recordingNotes, textNotes.Text);
+            buttonDelete.IsEnabled = true;
         }
 
         private void textNotes_TextChanged(object sender, TextChangedEventArgs e)
