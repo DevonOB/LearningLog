@@ -40,6 +40,7 @@ namespace LearningLog
         string recordingNotes = string.Empty;
         FileInfo storedInfo;
         bool recording = false;
+        protected internal static List<String> fileInfoList = new List<String>();
 
         // One the first click starts a recording and on the second click ends the recording and sets the rest of the page to be interactible
         private void buttonRecord_Click(object sender, RoutedEventArgs e)
@@ -70,29 +71,38 @@ namespace LearningLog
         // Deletes the current recording and resets the page for a new recording to occur
         private void buttonDelete_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (tabController.SelectedItem == tabEntry)
             {
-                if (recordingInfo != string.Empty)
+                try
                 {
-                    statusChange("Deleted recording");
-                    File.Delete(recordingInfo);
-                    recordingInfo = string.Empty;
-                    buttonRecord.IsEnabled = true;
-                    buttonDelete.IsEnabled = false;
-                    buttonSave.IsEnabled = false;
-                    buttonPlay.IsEnabled = false;
+                    if (recordingInfo != string.Empty)
+                    {
+                        statusChange("Deleted recording");
+                        File.Delete(recordingInfo);
+                        recordingInfo = string.Empty;
+                        buttonRecord.IsEnabled = true;
+                        buttonDelete.IsEnabled = false;
+                        buttonSave.IsEnabled = false;
+                        buttonPlay.IsEnabled = false;
+                    }
+                    else
+                    {
+                        statusChange("Failed to delete recording");
+                        throw new FileNotFoundException("No wav file availible for deletion");
+                    }
                 }
-                else
+                catch (FileNotFoundException a)
                 {
-                    statusChange("Failed to delete recording");
-                    throw new FileNotFoundException("No wav file availible for deletion");
+                    MessageBox.Show(a.Message);
                 }
             }
-            catch (FileNotFoundException a)
+            else
             {
-                MessageBox.Show(a.Message);
+                statusChange("Deleted text entry");
+                buttonSaveText.IsEnabled = false;
+                buttonDeleteText.IsEnabled = false;
+                textEntry.Text = string.Empty;
             }
-            
         }
 
         // Plays the recording and displays an error message if it is unavailible
@@ -124,41 +134,90 @@ namespace LearningLog
         {
             ID++;
             LogEntry newEntry;
-            string noteEntry = textNotes.Text;
-            newEntry = new LogEntry(ID, DateTime.Now.ToString("yyyyMMdd"), int.Parse(comboWellness.Text), int.Parse(comboQuality.Text), noteEntry, storedInfo);
-            buttonDelete.IsEnabled = false;
-            statusChange("Saved recording");
-            buttonRecord.IsEnabled = true;
-            buttonPlay.IsEnabled = false;
-            buttonSave.IsEnabled = false;
-            updateSummary(newEntry);
-            textNotes.Text = string.Empty;
-            textNotes.IsEnabled = false;
-            
+            if (tabController.SelectedItem == tabEntry)
+            {
+                string noteEntry = textNotes.Text;
+                newEntry = new AudioLogEntry(ID, int.Parse(comboWellness.Text), int.Parse(comboQuality.Text), noteEntry, storedInfo);
+                buttonDelete.IsEnabled = false;
+                statusChange("Saved recording");
+                buttonRecord.IsEnabled = true;
+                buttonPlay.IsEnabled = false;
+                buttonSave.IsEnabled = false;
+                updateSummary(newEntry);
+                textNotes.Text = string.Empty;
+                textNotes.IsEnabled = false;
+            }
+            else
+            {
+                storedInfo = RecordText.SaveTextEntry(textEntry.Text);
+                string noteEntry = textEntry.Text;
+                newEntry = new TextLogEntry(ID, int.Parse(comboWellness.Text), int.Parse(comboQuality.Text), noteEntry, storedInfo);
+                buttonDeleteText.IsEnabled = false;
+                statusChange("Saved text");
+                buttonSaveText.IsEnabled = false;
+                updateSummary(newEntry);
+                textEntry.Text = string.Empty;
+            }
+            if (!fileInfoList.Contains(newEntry.GetFile().ToString()))
+            {
+                fileInfoList.Add(newEntry.GetFile().ToString());
+                newEntry.AddToList(newEntry);
+                listEntries.Items.Add(newEntry.GetFile());
+            }
+
         }
 
         // When notes change activates the save button
         private void textNotes_TextChanged(object sender, TextChangedEventArgs e)
         {
-            buttonSave.IsEnabled = true;
-            statusChange("Edited notes");
+            
+            if (tabController.SelectedItem == tabEntry)
+            {
+                statusChange("Edited notes");
+                buttonSave.IsEnabled = true;
+            }
+            else
+            {
+                statusChange("Edited writing entry");
+                buttonSaveText.IsEnabled = true;
+                buttonDeleteText.IsEnabled = true;
+            }
         }
 
         // sets the status bar
         private void statusChange(string e)
         {
             textStatus.Text = e + " " +DateTime.Now;
+            textStatusText.Text = e + " " + DateTime.Now;
         }
 
         // update the summary page
         private void updateSummary(LogEntry entry)
         {
-            textID.Text = entry.GetID().ToString();
-            textDate.Text = entry.GetEntryDate();
-            textSummaryNotes.Text = entry.GetNotes();
-            textWellness.Text = entry.GetWellness().ToString();
-            textQuality.Text = entry.GetQuality().ToString();
-            textFile.Text = entry.GetRecordingFile().ToString();
+            if (tabController.SelectedItem == tabEntry)
+            {
+                labelSummaryNotes.Content = "Notes:";
+                textID.Text = entry.GetID().ToString();
+                textNewestEntry.Text = entry.GetNewestRecording().ToString();
+                textFirstEntry.Text = entry.GetFirstRecording().ToString();
+                textSummaryNotes.Text = entry.GetNotes();
+                textWellness.Text = entry.GetWellness().ToString();
+                textQuality.Text = entry.GetQuality().ToString();
+                textFile.Text = entry.GetFile().ToString();
+            }
+            else
+            {
+                labelSummaryNotes.Content = "Entry:";
+                textID.Text = entry.GetID().ToString();
+                textNewestEntry.Text = entry.GetNewestRecording().ToString();
+                textFirstEntry.Text = entry.GetFirstRecording().ToString();
+                textSummaryNotes.Text = entry.GetEntry();
+                textWellness.Text = entry.GetWellness().ToString();
+                textQuality.Text = entry.GetQuality().ToString();
+                textFile.Text = entry.GetFile().ToString();
+            }
         }
+
+        
     }
 }

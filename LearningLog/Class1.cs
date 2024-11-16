@@ -52,6 +52,17 @@ namespace LearningLog
             return returnFile;
         }
 
+      
+    }
+    internal static class RecordText
+    {
+        internal static FileInfo SaveTextEntry(string Entry)
+        {
+            string fileName = Environment.CurrentDirectory + "Files\\Writing_Entry" + DateTime.Now.ToString("yyyyMMdd") + ".text";
+            File.WriteAllText(fileName, Entry);
+            FileInfo returnFile = new FileInfo(fileName);
+            return returnFile;
+        }
     }
 }
 

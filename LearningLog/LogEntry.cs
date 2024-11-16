@@ -11,61 +11,66 @@ using System.Threading.Tasks;
 
 namespace LearningLog
 {
-    class LogEntry
+    internal abstract class LogEntry
     {
-        private int logID;
-        private string logEntryDate;
-        private int logWellness;
-        private int logQuality;
-        private string logNotes;
-        private FileInfo logFile;
+        protected internal int logID;
+        protected internal int logWellness;
+        protected internal int logQuality;
+        protected internal string logNotes;
+        protected internal string logEntry;
+        protected internal FileInfo logFile;
+        protected internal static DateTime firstEntry;
+        protected internal static DateTime newestEntry;
+        protected internal static List<LogEntry> list = new List<LogEntry>();
 
-        //LogEntry class definition
-        public LogEntry(int ID, string EntryDate, int Wellnes, int Quality, string Notes, FileInfo RecordingFile)
-        {
-            logID = ID;
-            logEntryDate = EntryDate;
-            logWellness = Wellnes;
-            logQuality = Quality;
-            logNotes = Notes;
-            logFile = RecordingFile;
-            
-        }
 
         // function to retreive the id
-        public int GetID()
+        protected internal int GetID()
         {
             return logID;
         }
 
-        // function to retrieve the date
-        public string GetEntryDate()
-        {
-            return logEntryDate;
-        }
-
         // function to retrieve the wellness
-        public int GetWellness()
+        protected internal int GetWellness()
         {
-            return logWellness;
+            return (logWellness);
         }
 
         // function to retrieve the quality
-        public int GetQuality()
-        {
+        protected internal int GetQuality() 
+        { 
             return logQuality;
         }
 
         // function to retrieve notes
-        public string GetNotes()
+        protected internal string GetNotes()
         {
             return logNotes;
         }
 
         // function to retrieve the file location
-        public FileInfo GetRecordingFile()
+        protected internal FileInfo GetFile()
         {
             return logFile;
+        }
+
+        // function to retrieve the first file
+        protected internal DateTime GetFirstRecording()
+        {
+            return firstEntry;
+        }
+        protected internal DateTime GetNewestRecording()
+        {
+            return newestEntry;
+        }
+        protected internal string GetEntry()
+        {
+            return logEntry;
+        }
+
+        protected internal void AddToList(LogEntry e)
+        {
+            list.Add(e);
         }
     }
 }
