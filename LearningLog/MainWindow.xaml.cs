@@ -134,6 +134,7 @@ namespace LearningLog
         {
             ID++;
             LogEntry newEntry;
+            // Saves audio recording
             if (tabController.SelectedItem == tabEntry)
             {
                 string noteEntry = textNotes.Text;
@@ -147,6 +148,7 @@ namespace LearningLog
                 textNotes.Text = string.Empty;
                 textNotes.IsEnabled = false;
             }
+            // Saves text file
             else
             {
                 storedInfo = RecordText.SaveTextEntry(textEntry.Text);
@@ -158,6 +160,7 @@ namespace LearningLog
                 updateSummary(newEntry);
                 textEntry.Text = string.Empty;
             }
+            // Adds the saved item to both lists and the list tab
             if (!fileInfoList.Contains(newEntry.GetFile().ToString()))
             {
                 fileInfoList.Add(newEntry.GetFile().ToString());
@@ -170,12 +173,13 @@ namespace LearningLog
         // When notes change activates the save button
         private void textNotes_TextChanged(object sender, TextChangedEventArgs e)
         {
-            
+            // edit status for audio log
             if (tabController.SelectedItem == tabEntry)
             {
                 statusChange("Edited notes");
                 buttonSave.IsEnabled = true;
             }
+            // edit status for text log
             else
             {
                 statusChange("Edited writing entry");
@@ -194,6 +198,7 @@ namespace LearningLog
         // update the summary page
         private void updateSummary(LogEntry entry)
         {
+            // update summary for an audio log
             if (tabController.SelectedItem == tabEntry)
             {
                 labelSummaryNotes.Content = "Notes:";
@@ -205,6 +210,7 @@ namespace LearningLog
                 textQuality.Text = entry.GetQuality().ToString();
                 textFile.Text = entry.GetFile().ToString();
             }
+            // update summary for a text log
             else
             {
                 labelSummaryNotes.Content = "Entry:";
