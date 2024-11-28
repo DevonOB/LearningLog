@@ -23,5 +23,12 @@ namespace LearningLog
             }
             newestEntry = DateTime.Now;
         }
+
+        public TextLogEntry()
+        {
+
+        }
     }
+
+   
 }

@@ -6,6 +6,7 @@
 
 
 using System.IO;
+using System.Xml;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
@@ -132,40 +133,49 @@ namespace LearningLog
         // Saves the current object and resets the page
         private void buttonSave_Click(object sender, RoutedEventArgs e)
         {
-            ID++;
-            LogEntry newEntry;
-            // Saves audio recording
-            if (tabController.SelectedItem == tabEntry)
+            if (buttonSave.IsEnabled==true || buttonSaveText.IsEnabled==true)
             {
-                string noteEntry = textNotes.Text;
-                newEntry = new AudioLogEntry(ID, int.Parse(comboWellness.Text), int.Parse(comboQuality.Text), noteEntry, storedInfo);
-                buttonDelete.IsEnabled = false;
-                statusChange("Saved recording");
-                buttonRecord.IsEnabled = true;
-                buttonPlay.IsEnabled = false;
-                buttonSave.IsEnabled = false;
-                updateSummary(newEntry);
-                textNotes.Text = string.Empty;
-                textNotes.IsEnabled = false;
+                ID++;
+                LogEntry newEntry;
+                // Saves audio recording
+                if (tabController.SelectedItem == tabEntry)
+                {
+                    string noteEntry = textNotes.Text;
+                    newEntry = new AudioLogEntry(ID, int.Parse(comboWellness.Text), int.Parse(comboQuality.Text), noteEntry, storedInfo);
+                    SaveXML(newEntry, true);
+                    buttonDelete.IsEnabled = false;
+                    statusChange("Saved recording");
+                    buttonRecord.IsEnabled = true;
+                    buttonPlay.IsEnabled = false;
+                    buttonSave.IsEnabled = false;
+                    updateSummary(newEntry);
+                    textNotes.Text = string.Empty;
+                    textNotes.IsEnabled = false;
+                }
+                // Saves text file
+                else
+                {
+                    storedInfo = RecordText.SaveTextEntry(textEntry.Text);
+                    string noteEntry = textEntry.Text;
+                    newEntry = new TextLogEntry(ID, int.Parse(comboWellness.Text), int.Parse(comboQuality.Text), noteEntry, storedInfo);
+                    SaveXML(newEntry, false);
+                    buttonDeleteText.IsEnabled = false;
+                    statusChange("Saved text");
+                    buttonSaveText.IsEnabled = false;
+                    updateSummary(newEntry);
+                    textEntry.Text = string.Empty;
+                }
+                // Adds the saved item to both lists and the list tab
+                if (!fileInfoList.Contains(newEntry.GetFile().ToString()))
+                {
+                    fileInfoList.Add(newEntry.GetFile().ToString());
+                    newEntry.AddToList(newEntry);
+                    listEntries.Items.Add(newEntry.GetFile());
+                }
             }
-            // Saves text file
             else
             {
-                storedInfo = RecordText.SaveTextEntry(textEntry.Text);
-                string noteEntry = textEntry.Text;
-                newEntry = new TextLogEntry(ID, int.Parse(comboWellness.Text), int.Parse(comboQuality.Text), noteEntry, storedInfo);
-                buttonDeleteText.IsEnabled = false;
-                statusChange("Saved text");
-                buttonSaveText.IsEnabled = false;
-                updateSummary(newEntry);
-                textEntry.Text = string.Empty;
-            }
-            // Adds the saved item to both lists and the list tab
-            if (!fileInfoList.Contains(newEntry.GetFile().ToString()))
-            {
-                fileInfoList.Add(newEntry.GetFile().ToString());
-                newEntry.AddToList(newEntry);
-                listEntries.Items.Add(newEntry.GetFile());
+                MessageBox.Show("No entry availible to save");
             }
 
         }
@@ -224,6 +234,74 @@ namespace LearningLog
             }
         }
 
-        
+        /// <summary>
+        /// saves to xml file hopefully
+        /// </summary>
+        private void SaveXML(LogEntry log, bool isAudio)
+        {
+            try
+            {
+                int listLength = log.GetList(log).Count;
+                // starts a xml writer
+                XmlWriter writer = XmlWriter.Create("LogEntry.xml");
+
+                writer.WriteStartDocument();
+                writer.WriteStartElement("LogEntry");
+                // write an audio log
+                for (int i = 0; i < listLength; i++)
+                {
+                    if (log.GetType() == typeof(AudioLogEntry))
+                    {
+                        writer.WriteStartElement("AudioLog");
+                        writer.WriteElementString("Newest", log.GetNewestRecording().ToString());
+                        writer.WriteElementString("First", log.GetFirstRecording().ToString());
+                        writer.WriteElementString("ID", log.GetID().ToString());
+                        writer.WriteElementString("Wellness", log.GetWellness().ToString());
+                        writer.WriteElementString("Quality", log.GetQuality().ToString());
+                        writer.WriteElementString("Notes", log.GetNotes());
+                        writer.WriteElementString("File", log.GetFile().ToString());
+                        writer.WriteEndElement();
+                    }
+                    // write a text log
+                    else
+                    {
+                        writer.WriteStartElement("TextLog");
+                        writer.WriteElementString("Newest", log.GetNewestRecording().ToString());
+                        writer.WriteElementString("First", log.GetFirstRecording().ToString());
+                        writer.WriteElementString("ID", log.GetID().ToString());
+                        writer.WriteElementString("Wellness", log.GetWellness().ToString());
+                        writer.WriteElementString("Quality", log.GetQuality().ToString());
+                        writer.WriteElementString("Entry", log.GetEntry());
+                        writer.WriteElementString("File", log.GetFile().ToString());
+                        writer.WriteEndElement();
+                    }
+                }
+
+                // close the xml writer
+                writer.WriteEndElement();
+                writer.WriteEndDocument();
+                writer.Flush();
+                writer.Close();
+            }
+            catch
+            {
+                MessageBox.Show("Error unable to save XML file");
+            }
+        }
+            
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void menuHelp_Click(object sender, RoutedEventArgs e)
+        {
+            statusChange("Viewed file information");
+            MessageBox.Show("This here file belongs to Devon O'Brien\n" + DateTime.Now);
+        }
+
+        private void restore()
+        {
+
+        }
     }
 }

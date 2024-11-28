@@ -72,5 +72,10 @@ namespace LearningLog
         {
             list.Add(e);
         }
+
+        protected internal List<LogEntry> GetList(LogEntry e)
+        {
+            return list;
+        }
     }
 }

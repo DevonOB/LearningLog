@@ -24,7 +24,11 @@ namespace LearningLog
             newestEntry = DateTime.Now;
 
         }
+        public AudioLogEntry()
+        {
 
-        
+        }
+
+
     }
 }

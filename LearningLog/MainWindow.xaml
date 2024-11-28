@@ -6,13 +6,21 @@
         xmlns:local="clr-namespace:LearningLog"
         mc:Ignorable="d"
         Title="LearningLog" Height="450" Width="800">
+
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="40" MinHeight="30"/>
         </Grid.RowDefinitions>
 
-        <TabControl x:Name="tabController">
+        <Menu>
+            <MenuItem x:Name="menuHelp" Width="40" Height="23" Header="_Help" Click="menuHelp_Click"/>
+            <MenuItem x:Name="menuSave" Width="40" Height="23" Header="_Save" Click="buttonSave_Click"/>
+            <MenuItem x:Name="menuClear" Width="40" Height="23" Header="_Clear"/>
+        </Menu>
+
+        <TabControl x:Name="tabController" Margin="0,24,0,0">
             <!-- The entry tab. -->
             <TabItem x:Name="tabEntry" Header="Audio_Entry" ToolTip="Create a new entry" >
                 <Grid>
@@ -184,7 +192,7 @@
                     <!-- Playback button -->
 
                     <!-- Delete button -->
-                    <Button x:Name="buttonDeleteText"  Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="0" Width="120" Margin="73,5,72,5" IsEnabled="False" Click="buttonDelete_Click" ToolTip="Click to delete the writing entry">
+                    <Button x:Name="buttonDeleteText"  Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="0" Width="120" Margin="5,5,5,5" IsEnabled="False" Click="buttonDelete_Click" ToolTip="Click to delete the writing entry">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
