@@ -141,15 +141,13 @@ namespace LearningLog
                 if (tabController.SelectedItem == tabEntry)
                 {
                     string noteEntry = textNotes.Text;
-                    newEntry = new AudioLogEntry(ID, int.Parse(comboWellness.Text), int.Parse(comboQuality.Text), noteEntry, storedInfo);
-                    SaveXML(newEntry, true);
-                    buttonDelete.IsEnabled = false;
+                    newEntry = new AudioLogEntry(ID, int.Parse(comboWellness.Text), int.Parse(comboQuality.Text), noteEntry, storedInfo);                    buttonDelete.IsEnabled = false;
                     statusChange("Saved recording");
                     buttonRecord.IsEnabled = true;
                     buttonPlay.IsEnabled = false;
+                    textNotes.Text = string.Empty;
                     buttonSave.IsEnabled = false;
                     updateSummary(newEntry);
-                    textNotes.Text = string.Empty;
                     textNotes.IsEnabled = false;
                 }
                 // Saves text file
@@ -158,7 +156,6 @@ namespace LearningLog
                     storedInfo = RecordText.SaveTextEntry(textEntry.Text);
                     string noteEntry = textEntry.Text;
                     newEntry = new TextLogEntry(ID, int.Parse(comboWellness.Text), int.Parse(comboQuality.Text), noteEntry, storedInfo);
-                    SaveXML(newEntry, false);
                     buttonDeleteText.IsEnabled = false;
                     statusChange("Saved text");
                     buttonSaveText.IsEnabled = false;
@@ -171,6 +168,7 @@ namespace LearningLog
                     fileInfoList.Add(newEntry.GetFile().ToString());
                     newEntry.AddToList(newEntry);
                     listEntries.Items.Add(newEntry.GetFile());
+                    SaveXML(newEntry);
                 }
             }
             else
@@ -237,11 +235,12 @@ namespace LearningLog
         /// <summary>
         /// saves to xml file hopefully
         /// </summary>
-        private void SaveXML(LogEntry log, bool isAudio)
+        private void SaveXML(LogEntry log)
         {
             try
             {
                 int listLength = log.GetList(log).Count;
+                List<LogEntry> logEntries = log.GetList(log);
                 // starts a xml writer
                 XmlWriter writer = XmlWriter.Create("LogEntry.xml");
 
@@ -250,35 +249,35 @@ namespace LearningLog
                 // write an audio log
                 for (int i = 0; i < listLength; i++)
                 {
+
                     if (log.GetType() == typeof(AudioLogEntry))
                     {
                         writer.WriteStartElement("AudioLog");
-                        writer.WriteElementString("Newest", log.GetNewestRecording().ToString());
-                        writer.WriteElementString("First", log.GetFirstRecording().ToString());
-                        writer.WriteElementString("ID", log.GetID().ToString());
-                        writer.WriteElementString("Wellness", log.GetWellness().ToString());
-                        writer.WriteElementString("Quality", log.GetQuality().ToString());
-                        writer.WriteElementString("Notes", log.GetNotes());
-                        writer.WriteElementString("File", log.GetFile().ToString());
+                        writer.WriteElementString("Newest", logEntries[i].GetNewestRecording().ToString());
+                        writer.WriteElementString("First", logEntries[i].GetFirstRecording().ToString());
+                        writer.WriteElementString("ID", logEntries[i].GetID().ToString());
+                        writer.WriteElementString("Wellness", logEntries[i].GetWellness().ToString());
+                        writer.WriteElementString("Quality", logEntries[i].GetQuality().ToString());
+                        writer.WriteElementString("Notes", logEntries[i].GetNotes());
+                        writer.WriteElementString("File", logEntries[i].GetFile().ToString());
                         writer.WriteEndElement();
                     }
                     // write a text log
                     else
                     {
                         writer.WriteStartElement("TextLog");
-                        writer.WriteElementString("Newest", log.GetNewestRecording().ToString());
-                        writer.WriteElementString("First", log.GetFirstRecording().ToString());
-                        writer.WriteElementString("ID", log.GetID().ToString());
-                        writer.WriteElementString("Wellness", log.GetWellness().ToString());
-                        writer.WriteElementString("Quality", log.GetQuality().ToString());
-                        writer.WriteElementString("Entry", log.GetEntry());
-                        writer.WriteElementString("File", log.GetFile().ToString());
+                        writer.WriteElementString("Newest", logEntries[i].GetNewestRecording().ToString());
+                        writer.WriteElementString("First", logEntries[i].GetFirstRecording().ToString());
+                        writer.WriteElementString("ID", logEntries[i].GetID().ToString());
+                        writer.WriteElementString("Wellness", logEntries[i].GetWellness().ToString());
+                        writer.WriteElementString("Quality", logEntries[i].GetQuality().ToString());
+                        writer.WriteElementString("Entry", logEntries[i].GetEntry());
+                        writer.WriteElementString("File", logEntries[i].GetFile().ToString());
                         writer.WriteEndElement();
                     }
                 }
 
                 // close the xml writer
-                writer.WriteEndElement();
                 writer.WriteEndDocument();
                 writer.Flush();
                 writer.Close();
