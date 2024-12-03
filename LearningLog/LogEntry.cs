@@ -73,6 +73,11 @@ namespace LearningLog
             list.Add(e);
         }
 
+        protected internal void RemoveFromList(LogEntry e)
+        {
+            list.Remove(e);
+        }
+
         protected internal List<LogEntry> GetList(LogEntry e)
         {
             return list;

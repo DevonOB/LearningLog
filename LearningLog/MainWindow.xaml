@@ -5,10 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LearningLog"
         mc:Ignorable="d"
+        Closing="Window_Closing"
         Title="LearningLog" Height="450" Width="800">
 
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="40" MinHeight="30"/>
@@ -17,7 +21,7 @@
         <Menu>
             <MenuItem x:Name="menuHelp" Width="40" Height="23" Header="_Help" Click="menuHelp_Click"/>
             <MenuItem x:Name="menuSave" Width="40" Height="23" Header="_Save" Click="buttonSave_Click"/>
-            <MenuItem x:Name="menuClear" Width="40" Height="23" Header="_Clear"/>
+            <MenuItem x:Name="menuClear" Width="40" Height="23" Header="_Clear" Click="menuClear_Click"/>
         </Menu>
 
         <TabControl x:Name="tabController" Margin="0,24,0,0">
@@ -151,7 +155,7 @@
                     <TextBox x:Name="textQuality" Grid.Column="5" HorizontalAlignment="Left" Grid.Row="3" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="120" ToolTip="Quality during recording" IsHitTestVisible="False"/>
                     <TextBox x:Name="textSummaryNotes" Grid.Column="5" HorizontalAlignment="Left" Grid.Row="4" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="362" ToolTip="Notes on recording" IsHitTestVisible="False" Grid.ColumnSpan="2" Margin="4,0,0,0" Height="41"/>
                     <TextBox x:Name="textFile" Grid.Column="5" HorizontalAlignment="Left" Grid.Row="5" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="362" ToolTip="Recording file" IsHitTestVisible="False" Grid.ColumnSpan="2" Margin="4,0,0,0" Height="41"/>
-                    <TextBox x:Name="textNewestEntry" Grid.Row="0" Grid.Column="5" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" Width="147" ToolTip="Recording ID" IsHitTestVisible="False" Margin="0,38,0,5" />
+                    <TextBox x:Name="textNewestEntry" Grid.Row="0" Grid.Column="5" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" Width="147" ToolTip="Recording ID" IsHitTestVisible="False" Margin="0,29,0,5" />
                     <Label Grid.Column="4" Grid.Row="0" Content="Current log:" HorizontalAlignment="Left" Margin="114,0,0,5" VerticalAlignment="Bottom" Width="77"/>
 
                 </Grid>
@@ -160,7 +164,11 @@
             <!-- The summary tab. -->
             <TabItem x:Name="tabList" Header="_List" ToolTip="View the list of past entries" >
                 <Grid>
-                    <ListView x:Name="listEntries" d:ItemsSource="{d:SampleData ItemCount=0}" ToolTip="A list of the existing entries">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="109*"/>
+                        <ColumnDefinition Width="288*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListView x:Name="listEntries" d:ItemsSource="{d:SampleData ItemCount=0}" ToolTip="A list of the existing entries" Height="269" VerticalAlignment="Top" Grid.ColumnSpan="2">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn x:Name="columnID"/>
@@ -168,6 +176,8 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
+                    <Button x:Name="buttonDeleteSelected" Content="Delete Selected" HorizontalAlignment="Left" Margin="382,290,0,0" VerticalAlignment="Top" Height="33" Width="119" Click="buttonDeleteSelected_Click" Grid.Column="1"/>
+                    <Button x:Name="buttonEditSelected" Content="Edit Selected" HorizontalAlignment="Center" Margin="0,290,0,0" VerticalAlignment="Top" Height="33" Width="119" Click="buttonEditSelected_Click"/>
 
 
                 </Grid>
@@ -214,7 +224,7 @@
                     <TextBox x:Name="textEntry" Grid.ColumnSpan="4" Grid.Row="3" Margin="5,5,5,5" TextChanged="textNotes_TextChanged" ToolTip="Enter any notes about today's entry"/>
 
                     <!-- Row 4. Just the save button. -->
-                    <Button x:Name="buttonSaveText" Grid.Column="2" Grid.Row="4" Width="120" Margin="89,5,56,5" IsEnabled="False" ToolTip="Click to finalize and save this entry" Click="buttonSave_Click">
+                    <Button x:Name="buttonSaveText" Grid.Column="2" Grid.Row="4" Width="120" Margin="40,5,56,5" IsEnabled="False" ToolTip="Click to finalize and save this entry" Click="buttonSave_Click">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
@@ -251,7 +261,7 @@
 
         </TabControl>
 
-        <StatusBar Grid.Row="1" >
+        <StatusBar Margin="0,394,0,0" Grid.RowSpan="2" >
             <StatusBarItem x:Name="statusState" />
         </StatusBar>
 
